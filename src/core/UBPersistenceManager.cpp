@@ -862,6 +862,7 @@ void UBPersistenceManager::insertDocumentSceneAt(UBDocumentProxy* proxy, UBGraph
     mSceneCache.shiftUpScenes(proxy, index, count -1);
 
     mSceneCache.insert(proxy, index, scene);
+    scene->setModified(true);
 
     if (persist) {
         persistDocumentScene(proxy, scene, index);
