@@ -2617,7 +2617,11 @@ void UBGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
     }
     bool darkBackground = isDarkBackground ();
 
-    if (darkBackground)
+    if (mBgColor.isValid())
+    {
+      painter->fillRect (rect, QBrush (mBgColor));
+    }
+    else if (darkBackground)
     {
       painter->fillRect (rect, QBrush (QColor (Qt::black)));
     }
