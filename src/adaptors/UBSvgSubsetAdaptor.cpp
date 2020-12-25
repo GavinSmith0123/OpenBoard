@@ -2821,15 +2821,15 @@ void UBSvgSubsetAdaptor::UBSvgSubsetReader::extractSvgText (QFont& font, qreal& 
           text = mXmlReader.text().toString();
           if (!text.trimmed().isEmpty())
           {
-              // heuristic to see if multiple <tspan> should be combined
-              // into a single text item.  do this by keeping track of
+              // Heuristic to see if multiple <tspan> should be combined
+              // into a single text item.  Do this by keeping track of
               // the end of the last block of text and seeing if the
-              // new block of text starts there.  we should check y values
-              // are exactly the same too.
-              // check if x and textEnd are very close.  may not be equal
-              // due to floating point imprecision.
-              if (textItem && -5.e-1 < x - textEnd && x - textEnd < 5.e-1
-                  && y == last_y)
+              // new block of text starts there.  x and textEnd may be very
+              // close but not equal due to floating point imprecision.
+              if (textItem
+                  && x == 0.0 && y == 0.0 // no x, y given
+                  || -5.e-1 < x - textEnd && x - textEnd < 5.e-1
+                     && y == last_y)
               {
                 textEnd += textLength;
               }
