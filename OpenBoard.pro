@@ -451,7 +451,7 @@ linux-g++* {
     #LIBS += -lprofiler
     LIBS += -lX11
     LIBS += -lquazip5
-    INCLUDEPATH += "/usr/include/quazip"
+    INCLUDEPATH += "/usr/include/quazip5"
 
     LIBS += -lpoppler
     INCLUDEPATH += "/usr/include/poppler"
