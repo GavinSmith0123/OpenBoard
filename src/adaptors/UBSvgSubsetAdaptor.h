@@ -192,6 +192,8 @@ class UBSvgSubsetAdaptor
                 QString patternID;
                 qreal patternWidth;
                 qreal patternHeight;
+
+                void importSvgElement(QStringRef name);
         };
 
         class UBSvgSubsetWriter
