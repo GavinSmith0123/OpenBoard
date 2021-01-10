@@ -429,6 +429,9 @@ class UBSettings : public QObject
         UBSetting* enableToolAxes;
         UBSetting* enableIntermediateLines;
 
+        UBSetting* importViewWholePages;
+        UBSetting* importCombineText;
+
     public slots:
 
         void setPenWidthIndex(int index);

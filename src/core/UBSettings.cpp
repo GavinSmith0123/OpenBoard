@@ -478,6 +478,9 @@ void UBSettings::init()
 
     pointerDiameter = value("Board/PointerDiameter", pointerDiameter).toInt();
 
+    importViewWholePages = new UBSetting(this, "Import", "ViewWholePages", false);
+    importCombineText = new UBSetting(this, "Import", "CombineText", false);
+
     cleanNonPersistentSettings();
     checkNewSettings();
 }
