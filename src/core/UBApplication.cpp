@@ -278,7 +278,13 @@ int UBApplication::exec(const QString& pFileToImport)
     gs->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
 
 
-    mainWindow = new UBMainWindow(0, Qt::FramelessWindowHint); // deleted by application destructor
+    mainWindow = new UBMainWindow(0,
+                                  Qt::Window |
+                                  Qt::WindowCloseButtonHint |
+                                  Qt::WindowMinimizeButtonHint |
+                                  Qt::WindowMaximizeButtonHint |
+                                  Qt::WindowShadeButtonHint
+                                  ); // deleted by application destructor
     mainWindow->setAttribute(Qt::WA_NativeWindow, true);
 
     mainWindow->actionCopy->setShortcuts(QKeySequence::Copy);
