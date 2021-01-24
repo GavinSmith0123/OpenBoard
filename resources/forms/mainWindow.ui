@@ -415,10 +415,10 @@
      <normaloff>:/images/toolbar/color.png</normaloff>:/images/toolbar/color.png</iconset>
    </property>
    <property name="text">
-    <string>Color0</string>
+    <string>Color</string>
    </property>
    <property name="toolTip">
-    <string>Color 1</string>
+    <string>Color</string>
    </property>
   </action>
   <action name="actionColor1">
@@ -430,10 +430,10 @@
      <normaloff>:/images/toolbar/color.png</normaloff>:/images/toolbar/color.png</iconset>
    </property>
    <property name="text">
-    <string>Color1</string>
+    <string>Color</string>
    </property>
    <property name="toolTip">
-    <string>Color 2</string>
+    <string>Color</string>
    </property>
   </action>
   <action name="actionColor2">
@@ -460,10 +460,10 @@
      <normaloff>:/images/toolbar/color.png</normaloff>:/images/toolbar/color.png</iconset>
    </property>
    <property name="text">
-    <string>Color3</string>
+    <string>Color</string>
    </property>
    <property name="toolTip">
-    <string>Color 4</string>
+    <string>Color</string>
    </property>
   </action>
   <action name="actionColor4">
@@ -475,10 +475,10 @@
      <normaloff>:/images/toolbar/color.png</normaloff>:/images/toolbar/color.png</iconset>
    </property>
    <property name="text">
-    <string>Color4</string>
+    <string>Color</string>
    </property>
    <property name="toolTip">
-    <string>Color 5</string>
+    <string>Color</string>
    </property>
   </action>
   <action name="actionWebBack">
