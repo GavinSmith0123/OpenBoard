@@ -592,7 +592,7 @@ bool UBGraphicsScene::inputDeviceMove(const QPointF& scenePos, const qreal& pres
                 // (less polygons to draw) but mostly with making the curve look smooth.
 
                 qreal antiScaleRatio = 1./(UBApplication::boardController->systemScaleFactor() * UBApplication::boardController->currentZoom());
-                qreal MIN_DISTANCE = 10*antiScaleRatio; // arbitrary. Move to settings if relevant.
+                qreal MIN_DISTANCE = 4*antiScaleRatio; // arbitrary. Move to settings if relevant.
                 qreal distance = QLineF(mPreviousPoint, scenePos).length();
 
                 mDistanceFromLastStrokePoint += distance;
