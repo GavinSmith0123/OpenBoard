@@ -586,24 +586,9 @@ bool UBGraphicsScene::inputDeviceMove(const QPointF& scenePos, const qreal& pres
                 {
                     interpolate = true;
                 }
-
-
-                // Don't draw segments smaller than a certain length. This can help with performance
-                // (less polygons to draw) but mostly with making the curve look smooth.
-
-                qreal antiScaleRatio = 1./(UBApplication::boardController->systemScaleFactor() * UBApplication::boardController->currentZoom());
-                qreal MIN_DISTANCE = 4*antiScaleRatio; // arbitrary. Move to settings if relevant.
-                qreal distance = QLineF(mPreviousPoint, scenePos).length();
-
-                mDistanceFromLastStrokePoint += distance;
-
-                if (mDistanceFromLastStrokePoint > MIN_DISTANCE) {
-                    QList<QPair<QPointF, qreal> > newPoints = mCurrentStroke->addPoint(scenePos, width, interpolate);
-                    if (newPoints.length() > 1)
-                        drawCurve(newPoints);
-
-                    mDistanceFromLastStrokePoint = 0;
-                }
+                QList<QPair<QPointF, qreal> > newPoints = mCurrentStroke->addPoint(scenePos, width, interpolate);
+                if (newPoints.length() > 1)
+                    drawCurve(newPoints);
 
                 if (interpolate) {
                     // Bezier curves aren't drawn all the way to the scenePos (they stop halfway between the previous and
