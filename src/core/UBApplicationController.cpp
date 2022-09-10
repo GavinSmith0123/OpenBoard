@@ -567,7 +567,7 @@ void UBApplicationController::checkAtLaunch()
 {
     mOpenSankoreImporter = new UBOpenSankoreImporter(mMainWindow->centralWidget());
 
-    if(UBSettings::settings()->appEnableAutomaticSoftwareUpdates->get().toBool()){
+    if(0 && UBSettings::settings()->appEnableAutomaticSoftwareUpdates->get().toBool()){
         isNoUpdateDisplayed = false;
         checkUpdate();
     }
