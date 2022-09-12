@@ -371,9 +371,12 @@ void UBBoardView::tabletEvent (QTabletEvent * event)
             (currentTool == UBStylusTool::Marker && mMarkerPressureSensitive))
         pressure = event->pressure ();
     else{
+#if 0
         //Explanation: rerouting to mouse event
         event->setAccepted (false);
         return;
+#endif
+        pressure = 1.0;
     }
 
     bool acceptEvent = true;
