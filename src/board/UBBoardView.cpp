@@ -392,6 +392,13 @@ void UBBoardView::tabletEvent (QTabletEvent * event)
     }
 #endif
 
+    if (currentTool == UBStylusTool::Hand
+       || currentTool == UBStylusTool::Selector) {
+        //Explanation: rerouting to mouse event
+        event->setAccepted (false);
+        return;
+    }
+
     switch (event->type ()) {
     case QEvent::TabletPress: {
         mTabletStylusIsPressed = true;
