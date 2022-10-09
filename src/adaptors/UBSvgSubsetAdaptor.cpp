@@ -760,7 +760,9 @@ UBGraphicsScene* UBSvgSubsetAdaptor::UBSvgSubsetReader::loadScene(UBDocumentProx
 
                     bool isBackground = (!ubBackground.isNull() && ubBackground.toString() == xmlTrue);
 
-                    if (href.contains("png"))
+                    if (href.contains("png")
+                        || href.contains("jpg")
+                        || href.contains("jpeg"))
                     {
                         UBGraphicsPixmapItem* pixmapItem = pixmapItemFromSvg();
                         if (pixmapItem)
