@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -451,8 +451,8 @@ bool UBGraphicsScene::inputDevicePress(const QPointF& scenePos, const qreal& pre
             mAddedItems.clear();
             mRemovedItems.clear();
 
-            if (UBDrawingController::drawingController()->mActiveRuler)
-                UBDrawingController::drawingController()->mActiveRuler->StartLine(scenePos, width);
+            if (UBDrawingController::drawingController()->activeRuler())
+                UBDrawingController::drawingController()->activeRuler()->StartLine(scenePos, width);
             else {
                 moveTo(scenePos);
                 drawLineTo(scenePos, width, UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Line);
@@ -539,7 +539,7 @@ bool UBGraphicsScene::inputDeviceMove(const QPointF& scenePos, const qreal& pres
             width /= UBApplication::boardController->systemScaleFactor();
             width /= UBApplication::boardController->currentZoom();
 
-            if (currentTool == UBStylusTool::Line || dc->mActiveRuler)
+            if (currentTool == UBStylusTool::Line || dc->activeRuler())
             {
                 if (UBDrawingController::drawingController()->stylusTool() != UBStylusTool::Marker)
                 if(NULL != mpLastPolygon && NULL != mCurrentStroke && mAddedItems.size() > 0){
@@ -573,8 +573,8 @@ bool UBGraphicsScene::inputDeviceMove(const QPointF& scenePos, const qreal& pres
             if (!mCurrentStroke)
                 mCurrentStroke = new UBGraphicsStroke(this);
 
-            if(dc->mActiveRuler){
-                dc->mActiveRuler->DrawLine(position, width);
+            if(dc->activeRuler()){
+                dc->activeRuler()->DrawLine(position, width);
             }
 
             else if (currentTool == UBStylusTool::Line) {
@@ -840,6 +840,8 @@ void UBGraphicsScene::drawMarkerCircle(const QPointF &pPoint)
 
 void UBGraphicsScene::drawPenCircle(const QPointF &pPoint)
 {
+    QCursor cursor;
+
     if (mPenCircle && UBSettings::settings()->showPenPreviewCircle->get().toBool() &&
         UBSettings::settings()->currentPenWidth() >= UBSettings::settings()->penPreviewFromSize->get().toInt()) {
         qreal penDiameter = UBSettings::settings()->currentPenWidth();
@@ -849,20 +851,20 @@ void UBGraphicsScene::drawPenCircle(const QPointF &pPoint)
 
         mPenCircle->setRect(QRectF(pPoint.x() - penRadius, pPoint.y() - penRadius,
                                       penDiameter, penDiameter));
-
-        if (controlView())
-            if (controlView()->viewport())
-                controlView()->viewport()->setCursor(QCursor (Qt::BlankCursor));
-
         mPenCircle->show();
+        cursor = Qt::BlankCursor;
     }
     else
     {
-        if (controlView())
-            if (controlView()->viewport())
-                controlView()->viewport()->setCursor(UBResources::resources()->penCursor);
+        cursor = UBResources::resources()->penCursor;
     }
 
+    if (!UBDrawingController::drawingController()->activeRuler())
+    {
+        // set cursor only if no active ruler
+        if (controlView() && controlView()->viewport())
+            controlView()->viewport()->setCursor(cursor);
+    }
 }
 
 void UBGraphicsScene::hideMarkerCircle()
@@ -1335,9 +1337,12 @@ void UBGraphicsScene::updateSelectionFrame()
         mSelectionFrame->setEnclosedItems(QList<QGraphicsItem*>());
 
         UBGraphicsItemDelegate *itemDelegate = UBGraphicsItem::Delegate(selItems.first());
-        itemDelegate->createControls();
-        selItems.first()->setVisible(true);
-        itemDelegate->showControls();
+        if (itemDelegate)
+        {
+            itemDelegate->createControls();
+            selItems.first()->setVisible(true);
+            itemDelegate->showControls();
+        }
 
     } break;
     default: {
@@ -1473,6 +1478,7 @@ void UBGraphicsScene::clearContent(clearCase pCase)
         if(mBackgroundObject){
             removeItem(mBackgroundObject);
             removedItems << mBackgroundObject;
+            mBackgroundObject = nullptr;
         }
         break;
 
@@ -1930,8 +1936,11 @@ UBGraphicsTextItem* UBGraphicsScene::addTextWithFont(const QString& pString, con
 UBGraphicsTextItem *UBGraphicsScene::addTextHtml(const QString &pString, const QPointF& pTopLeft)
 {
     UBGraphicsTextItem *textItem = new UBGraphicsTextItem();
+
     textItem->setPlainText("");
     textItem->setHtml(UBTextTools::cleanHtml(pString));
+
+    textItem->initFontProperties();
 
     addItem(textItem);
     textItem->show();
@@ -2377,6 +2386,9 @@ void UBGraphicsScene::changeMagnifierMode(int mode)
 {
     if(magniferControlViewWidget)
         magniferControlViewWidget->setDrawingMode(mode);
+
+    if(magniferDisplayViewWidget)
+        magniferDisplayViewWidget->setDrawingMode(mode);
 }
 
 void UBGraphicsScene::resizedMagnifier(qreal newPercent)
@@ -2463,9 +2475,53 @@ void UBGraphicsScene::setRenderingQuality(UBItem::RenderingQuality pRenderingQua
     }
 }
 
+QList<QUrl> UBGraphicsScene::relativeDependenciesOfItem(QGraphicsItem* item) const
+{
+    QList<QUrl> relativePaths;
+
+    UBGraphicsVideoItem *videoItem = dynamic_cast<UBGraphicsVideoItem*> (item);
+    if (videoItem){
+        QString completeFileName = QFileInfo(videoItem->mediaFileUrl().toLocalFile()).fileName();
+        QString path = UBPersistenceManager::videoDirectory + "/";
+        relativePaths << QUrl(path + completeFileName);
+        return relativePaths;
+    }
+
+    UBGraphicsAudioItem *audioItem =  dynamic_cast<UBGraphicsAudioItem*> (item);
+    if (audioItem){
+        QString completeFileName = QFileInfo(audioItem->mediaFileUrl().toLocalFile()).fileName();
+        QString path = UBPersistenceManager::audioDirectory + "/";
+        relativePaths << QUrl(path + completeFileName);
+        return relativePaths;
+    }
+
+    UBGraphicsWidgetItem* widget = dynamic_cast<UBGraphicsWidgetItem*>(item);
+    if(widget){
+        QString widgetPath = UBPersistenceManager::widgetDirectory + "/" + widget->uuid().toString() + ".wgt";
+        QString screenshotPath = UBPersistenceManager::widgetDirectory + "/" + widget->uuid().toString().remove("{").remove("}") + ".png";
+        relativePaths << QUrl(widgetPath);
+        relativePaths << QUrl(screenshotPath);
+        return relativePaths;
+    }
+
+    UBGraphicsPixmapItem* pixmapItem = dynamic_cast<UBGraphicsPixmapItem*>(item);
+    if(pixmapItem){
+        relativePaths << QUrl(UBPersistenceManager::imageDirectory + "/" + pixmapItem->uuid().toString() + ".png");
+        return relativePaths;
+    }
+
+    UBGraphicsSvgItem* svgItem = dynamic_cast<UBGraphicsSvgItem*>(item);
+    if(svgItem){
+        relativePaths << QUrl(UBPersistenceManager::imageDirectory + "/" + svgItem->uuid().toString() + ".svg");
+        return relativePaths;
+    }
+
+    return relativePaths;
+}
+
 QList<QUrl> UBGraphicsScene::relativeDependencies() const
 {
-    QList<QUrl> relativePathes;
+    QList<QUrl> relativePaths;
 
     QListIterator<QGraphicsItem*> itItems(mFastAccessItems);
 
@@ -2473,45 +2529,19 @@ QList<QUrl> UBGraphicsScene::relativeDependencies() const
     {
         QGraphicsItem* item = itItems.next();
 
-        UBGraphicsVideoItem *videoItem = qgraphicsitem_cast<UBGraphicsVideoItem*> (item);
-        if (videoItem){
-            QString completeFileName = QFileInfo(videoItem->mediaFileUrl().toLocalFile()).fileName();
-            QString path = UBPersistenceManager::videoDirectory + "/";
-            relativePathes << QUrl(path + completeFileName);
-            continue;
+        UBGraphicsGroupContainerItem* groupItem = dynamic_cast<UBGraphicsGroupContainerItem*>(item);
+        if(groupItem)
+        {
+            for (auto child : groupItem->childItems())
+            {
+                relativePaths << relativeDependenciesOfItem(child);
+            }
         }
-
-        UBGraphicsAudioItem *audioItem = qgraphicsitem_cast<UBGraphicsAudioItem*> (item);
-        if (audioItem){
-            QString completeFileName = QFileInfo(audioItem->mediaFileUrl().toLocalFile()).fileName();
-            QString path = UBPersistenceManager::audioDirectory + "/";
-            relativePathes << QUrl(path + completeFileName);
-            continue;
-        }
-
-        UBGraphicsWidgetItem* widget = qgraphicsitem_cast<UBGraphicsWidgetItem*>(item);
-        if(widget){
-            QString widgetPath = UBPersistenceManager::widgetDirectory + "/" + widget->uuid().toString() + ".wgt";
-            QString screenshotPath = UBPersistenceManager::widgetDirectory + "/" + widget->uuid().toString().remove("{").remove("}") + ".png";
-            relativePathes << QUrl(widgetPath);
-            relativePathes << QUrl(screenshotPath);
-            continue;
-        }
-
-        UBGraphicsPixmapItem* pixmapItem = qgraphicsitem_cast<UBGraphicsPixmapItem*>(item);
-        if(pixmapItem){
-            relativePathes << QUrl(UBPersistenceManager::imageDirectory + "/" + pixmapItem->uuid().toString() + ".png");
-            continue;
-        }
-
-        UBGraphicsSvgItem* svgItem = qgraphicsitem_cast<UBGraphicsSvgItem*>(item);
-        if(svgItem){
-            relativePathes << QUrl(UBPersistenceManager::imageDirectory + "/" + svgItem->uuid().toString() + ".svg");
-            continue;
-        }
+        else
+            relativePaths << relativeDependenciesOfItem(item);
     }
 
-    return relativePathes;
+    return relativePaths;
 }
 
 QSize UBGraphicsScene::nominalSize()

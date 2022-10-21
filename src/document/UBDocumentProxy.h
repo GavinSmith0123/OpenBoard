@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -49,7 +49,6 @@ class UBDocumentProxy : public QObject
         UBDocumentProxy();
         UBDocumentProxy(const UBDocumentProxy &rValue);
         UBDocumentProxy(const QString& pPersistencePath);
-        UBDocumentProxy(const QString& pPersistencePath, QMap<QString, QVariant> metadatas);
 
         virtual ~UBDocumentProxy();
 

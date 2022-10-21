@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -104,6 +104,11 @@ bool UBFileSystemUtils::copyFile(const QString &source, const QString &destinati
     if (QFile::exists(normalizedDestination)) {
         if  (QFileInfo(normalizedDestination).isFile() && overwrite) {
             QFile::remove(normalizedDestination);
+        }
+        else
+        {
+            if (!overwrite)
+                return true; // don't try to copy an existing file if overwrite is false
         }
     } else {
         normalizedDestination = normalizedDestination.replace(QString("\\"), QString("/"));
@@ -300,7 +305,7 @@ bool UBFileSystemUtils::copyDir(const QString& pSourceDirPath, const QString& pT
         {
             if (dirContent.isDir())
             {
-                successSoFar = copyDir(pSourceDirPath + "/" + dirContent.fileName(), pTargetDirPath + "/" + dirContent.fileName());
+                successSoFar = copyDir(pSourceDirPath + "/" + dirContent.fileName(), pTargetDirPath + "/" + dirContent.fileName(), overwite);
             }
             else
             {

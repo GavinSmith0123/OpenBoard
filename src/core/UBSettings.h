@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -97,6 +97,8 @@ class UBSettings : public QObject
         // Text related
         QString fontFamily();
         void setFontFamily(const QString &family);
+        QString fontStyleName();
+        void setFontStyleName(const QString &family);
         int fontPixelSize();
         void setFontPixelSize(int pixelSize);
         int fontPointSize();
@@ -202,7 +204,6 @@ class UBSettings : public QObject
         static QString documentIdentifer;
         static QString documentVersion;
         static QString documentUpdatedAt;
-        static QString documentPageCount;
 
         static QString documentDate;
 
@@ -328,12 +329,10 @@ class UBSettings : public QObject
         UBSetting* webShowPageImmediatelyOnMirroredScreen;
 
         UBSetting* webHomePage;
-        UBSetting* webBookmarksPage;
-        UBSetting* webAddBookmarkUrl;
-        UBSetting* webShowAddBookmarkButton;
 
         UBSetting* pageCacheSize;
 
+        UBSetting* boardZoomBase;
         UBSetting* boardZoomFactor;
 
         UBSetting* mirroringRefreshRateInFps;
@@ -359,10 +358,13 @@ class UBSettings : public QObject
         UBSetting* svgViewBoxMargin;
         UBSetting* pdfMargin;
         UBSetting* pdfPageFormat;
+        UBSetting* pdfUsePDFMerger;
         UBSetting* pdfResolution;
 
         UBSetting* pdfZoomBehavior;
         UBSetting* enableQualityLossToIncreaseZoomPerfs;
+        UBSetting* exportBackgroundGrid;
+        UBSetting* exportBackgroundColor;
 
         UBSetting* podcastFramesPerSecond;
         UBSetting* podcastVideoSize;
@@ -469,6 +471,7 @@ class UBSettings : public QObject
 
         static const int sDefaultFontPixelSize;
         static const char *sDefaultFontFamily;
+        static const char *sDefaultFontStyleName;
 
         static QSettings* getAppSettings();
 

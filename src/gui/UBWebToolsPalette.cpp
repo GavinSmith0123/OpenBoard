@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -49,7 +49,7 @@ UBWebToolsPalette::UBWebToolsPalette(QWidget *parent)
 {
     QList<QAction*> actions;
 
-    actions << UBApplication::mainWindow->actionWebTrapFlash;
+    actions << UBApplication::mainWindow->actionCaptureWebContent;
 
     actions << UBApplication::mainWindow->actionWebCustomCapture;
     actions << UBApplication::mainWindow->actionWebWindowCapture;

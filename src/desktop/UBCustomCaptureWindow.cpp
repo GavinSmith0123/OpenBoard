@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -79,6 +79,8 @@ int UBCustomCaptureWindow::execute(const QPixmap &pScreenPixmap)
 
     QDesktopWidget *desktop = QApplication::desktop();
     int currentScreen = desktop->screenNumber(QCursor::pos());
+    // necessary so that changing geometry really affects the widget
+    showNormal();
     setGeometry(desktop->screenGeometry(currentScreen));
     this->show();
     setWindowOpacity(1.0);

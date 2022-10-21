@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -48,9 +48,11 @@ class UBDocumentThumbnailWidget: public UBThumbnailWidget
         void hightlightItem(int index);
 
     public slots:
-        virtual void setGraphicsItems(const QList<QGraphicsItem*>& pGraphicsItems,
-            const QList<QUrl>& pItemPaths, const QStringList pLabels = QStringList(),
-            const QString& pMimeType = QString(""));
+            void updateThumbnailPixmap(int index, const QPixmap& newThumbnail);
+            void removeThumbnail(int index);
+            void moveThumbnail(int from, int to);
+            void insertThumbnail(int index, QGraphicsPixmapItem *newThumbnail);
+            virtual void setGraphicsItems(const QList<QGraphicsItem*>& pGraphicsItems, const QList<QUrl>& pItemPaths, const QStringList pLabels = QStringList(), const QString& pMimeType = QString(""));
 
     signals:
         void sceneDropped(UBDocumentProxy* proxy, int source, int target);

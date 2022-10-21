@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -222,6 +222,7 @@ void UBSceneCache::shiftUpScenes(UBDocumentProxy* proxy, int startIncIndex, int 
 {
     for(int i = endIncIndex; i >= startIncIndex; i--)
     {
+        UBApplication::showMessage(QObject::tr("Moving cached scenes (%1/%2)").arg(i).arg(endIncIndex));
         internalMoveScene(proxy, i, i + 1);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -450,7 +450,7 @@ void UBGraphicsRuler::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     else if (UBDrawingController::drawingController()->isDrawingTool())
     {
         setCursor(drawRulerLineCursor());
-        UBDrawingController::drawingController()->mActiveRuler = this;
+        UBDrawingController::drawingController()->setActiveRuler(this);
         event->accept();
     }
 }
@@ -462,7 +462,7 @@ void UBGraphicsRuler::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     mCloseSvgItem->setVisible(mShowButtons);
     mResizeSvgItem->setVisible(mShowButtons);
     mRotateSvgItem->setVisible(mShowButtons);
-    UBDrawingController::drawingController()->mActiveRuler = NULL;
+    UBDrawingController::drawingController()->setActiveRuler(nullptr);
     event->accept();
     update();
 }

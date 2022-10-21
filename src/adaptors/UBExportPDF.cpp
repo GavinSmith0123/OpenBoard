@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -87,6 +87,7 @@ bool UBExportPDF::persistsDocument(UBDocumentProxy* pDocumentProxy, const QStrin
     pdfWriter.setPageMargins(QMarginsF());
     pdfWriter.setTitle(pDocumentProxy->name());
     pdfWriter.setCreator("OpenBoard PDF export");
+    pdfWriter.setPdfVersion(QPagedPaintDevice::PdfVersion_1_4);
 
     //need to calculate screen resolution
     QDesktopWidget* desktop = UBApplication::desktop();
@@ -106,7 +107,17 @@ bool UBExportPDF::persistsDocument(UBDocumentProxy* pDocumentProxy, const QStrin
         // set background to white, no crossing for PDF output
         bool isDark = scene->isDarkBackground();
         UBPageBackground pageBackground = scene->pageBackground();
-        scene->setBackground(false, UBPageBackground::plain);
+
+        bool exportDark = isDark && UBSettings::settings()->exportBackgroundColor->get().toBool();
+
+        if (UBSettings::settings()->exportBackgroundGrid->get().toBool())
+        {
+            scene->setBackground(exportDark, pageBackground);
+        }
+        else
+        {
+            scene->setBackground(exportDark, UBPageBackground::plain);
+        }
 
         // pageSize is the output PDF page size; it is set to equal the scene's boundary size; if the contents
         // of the scene overflow from the boundaries, they will be scaled down.

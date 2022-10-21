@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -318,6 +318,7 @@ class UBGraphicsScene: public UBCoreGraphicsScene, public UBItem
 
         virtual void setRenderingQuality(UBItem::RenderingQuality pRenderingQuality, UBItem::CacheBehavior cacheBehavior);
 
+        QList<QUrl> relativeDependenciesOfItem(QGraphicsItem* item) const;
         QList<QUrl> relativeDependencies() const;
 
         QSize nominalSize();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -81,6 +81,8 @@ const QString UBApplication::mimeTypeUniboardPage = QString("application/vnd.mne
 const QString UBApplication::mimeTypeUniboardPageItem =  QString("application/vnd.mnemis-uniboard-page-item");
 const QString UBApplication::mimeTypeUniboardPageThumbnail = QString("application/vnd.mnemis-uniboard-thumbnail");
 
+QString UBApplication::fileToOpen = "";
+
 #if defined(Q_OS_OSX) || defined(Q_OS_LINUX)
 bool bIsMinimized = false;
 #endif
@@ -88,7 +90,7 @@ bool bIsMinimized = false;
 QObject* UBApplication::staticMemoryCleaner = 0;
 
 
-UBApplication::UBApplication(const QString &id, int &argc, char **argv) : QtSingleApplication(id, argc, argv)
+UBApplication::UBApplication(const QString &id, int &argc, char **argv) : SingleApplication(argc, argv)
   , mPreferencesController(NULL)
   , mApplicationTranslator(NULL)
   , mQtGuiTranslator(NULL)
@@ -315,6 +317,14 @@ int UBApplication::exec(const QString& pFileToImport)
                                                         boardController->paletteManager()->rightPalette());
 
 
+    if (!UBApplication::fileToOpen.isEmpty())
+    {
+        if (!UBApplication::fileToOpen.endsWith("ubx"))
+           applicationController->importFile(UBApplication::fileToOpen);
+        else
+            applicationController->showMessage(tr("Cannot open your UBX file directly. Please import it in Documents mode instead"), false);
+    }
+
     connect(applicationController, SIGNAL(mainModeChanged(UBApplicationController::MainMode)),
             boardController->paletteManager(), SLOT(slot_changeMainMode(UBApplicationController::MainMode)));
 
@@ -354,7 +364,12 @@ int UBApplication::exec(const QString& pFileToImport)
     boardController->setupLayout();
 
     if (pFileToImport.length() > 0)
-        UBApplication::applicationController->importFile(pFileToImport);
+    {
+        if (!pFileToImport.endsWith("ubx"))
+            applicationController->importFile(pFileToImport);
+        else
+            applicationController->showMessage(tr("Cannot open your UBX file directly. Please import it in Documents mode instead"), false);
+    }
 
     if (UBSettings::settings()->appStartMode->get().toInt())
         applicationController->showDesktop();
@@ -581,7 +596,21 @@ bool UBApplication::eventFilter(QObject *obj, QEvent *event)
 
         UBPlatformUtils::setFrontProcess();
 
-        applicationController->importFile(fileToOpenEvent->file());
+        if (applicationController)
+        {
+            if (!fileToOpenEvent->file().endsWith("ubx"))
+                applicationController->importFile(fileToOpenEvent->file());
+            else
+                applicationController->showMessage(tr("Cannot open your UBX file directly. Please import it in Documents mode instead"), false);
+        }
+        else
+        {
+            //startup : progressdialog.exec() is called and fileOpenEvent is consumed too early
+            // we store the file and will import it when the documents tree is ready
+
+            UBApplication::fileToOpen = fileToOpenEvent->file();
+            return true;
+        }
     }
 
     if (event->type() == QEvent::TabletLeaveProximity)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -88,6 +88,8 @@ public:
     bool isPlaying() const { return (mMediaObject->state() == QMediaPlayer::PlayingState); }
     bool isPaused() const { return (mMediaObject->state() == QMediaPlayer::PausedState); }
     bool isStopped() const;
+    bool firstLoad() const;
+    void setFirstLoad(bool firstLoad);
 
     QRectF boundingRect() const;
 
@@ -140,6 +142,7 @@ protected:
     bool mMutedByUserAction;
     static bool sIsMutedByDefault;
     bool mStopped;
+    bool mFirstLoad;
 
     QUrl mMediaFileUrl;
     QString mMediaSource;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -512,16 +512,18 @@ void UBBoardPaletteManager::containerResized()
         mKeyboardPalette->adjustSizeAndPosition();
     }
 
-    if(mLeftPalette)
+// NOTE @letsfindaway Fixed, but don't see any reason for this.
+// Probably remove.
+    if(mLeftPalette && mLeftPalette->width() > 0)
     {
         mLeftPalette->resize(mLeftPalette->width()-1, mContainer->height());
-        mLeftPalette->resize(mLeftPalette->width(), mContainer->height());
+        mLeftPalette->resize(mLeftPalette->width()+1, mContainer->height());
     }
 
-    if(mRightPalette)
+    if(mRightPalette && mRightPalette->width() > 0)
     {
         mRightPalette->resize(mRightPalette->width()-1, mContainer->height());
-        mRightPalette->resize(mRightPalette->width(), mContainer->height());
+        mRightPalette->resize(mRightPalette->width()+1, mContainer->height());
     }
 }
 

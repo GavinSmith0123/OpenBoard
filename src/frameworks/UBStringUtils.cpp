@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -30,6 +30,19 @@
 #include "UBStringUtils.h"
 
 #include "core/memcheck.h"
+
+bool UBStringUtils::containsPrefix(const QStringList &prefixes, const QString &string, Qt::CaseSensitivity cs)
+{
+    for (const QString& prefix : prefixes)
+    {
+        if (string.startsWith(prefix, cs))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 QStringList UBStringUtils::sortByLastDigit(const QStringList& sourceList)
 {
@@ -72,7 +85,7 @@ QStringList UBStringUtils::sortByLastDigit(const QStringList& sourceList)
 }
 
 
-QString UBStringUtils::netxDigitizedName(const QString& source)
+QString UBStringUtils::nextDigitizedName(const QString& source)
 {
 
     // we look for a set of digit after non digits and at the end

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -122,8 +122,8 @@ int main(int argc, char *argv[])
         if (f.exists()) {
             fileToOpen += args[1];
 
-            if (app.sendMessage(UBSettings::appPingMessage, 20000)) {
-                app.sendMessage(fileToOpen, 1000000);
+            if (app.sendMessage(UBSettings::appPingMessage.toUtf8(), 20000)) {
+                app.sendMessage(fileToOpen.toUtf8(), 1000000);
                 return 0;
             }
         }

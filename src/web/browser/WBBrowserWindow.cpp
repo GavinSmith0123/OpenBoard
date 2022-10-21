@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -248,9 +248,6 @@ void WBBrowserWindow::setupToolBar()
     mWebToolBar->insertSeparator(mUniboardMainWindow->actionWebBigger);
 
     connect(mUniboardMainWindow->actionHome, SIGNAL(triggered()), this , SLOT(slotHome()));
-
-    connect(mUniboardMainWindow->actionBookmarks, SIGNAL(triggered()), this , SLOT(bookmarks()));
-    connect(mUniboardMainWindow->actionAddBookmark, SIGNAL(triggered()), this , SLOT(addBookmark()));
     connect(mUniboardMainWindow->actionWebBigger, SIGNAL(triggered()), this , SLOT(slotViewZoomIn()));
     connect(mUniboardMainWindow->actionWebSmaller, SIGNAL(triggered()), this , SLOT(slotViewZoomOut()));
 
@@ -511,18 +508,6 @@ void WBBrowserWindow::tabCurrentChanged(int index)
 
     emit activeViewChange(current);
     emit activeViewPageChanged();
-}
-
-
-void WBBrowserWindow::bookmarks()
-{
-    loadPage(UBSettings::settings()->webBookmarksPage->get().toString());
-}
-
-
-void WBBrowserWindow::addBookmark()
-{
-    loadPage(UBSettings::settings()->webAddBookmarkUrl->get().toString() + currentTabWebView()->url().toString());
 }
 
 

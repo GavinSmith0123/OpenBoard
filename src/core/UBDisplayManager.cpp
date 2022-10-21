@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -180,7 +180,7 @@ void UBDisplayManager::setDisplayWidget(QWidget* pDisplayWidget)
         }
         mDisplayWidget = pDisplayWidget;
         mDisplayWidget->setGeometry(mDesktop->screenGeometry(mDisplayScreenIndex));
-        if (UBSettings::settings()->appUseMultiscreen->get().toBool())
+        if (numScreens() > 1 && UBSettings::settings()->appUseMultiscreen->get().toBool())
             UBPlatformUtils::showFullScreen(mDisplayWidget);
     }
 }
@@ -236,7 +236,7 @@ void UBDisplayManager::positionScreens()
 
     if (mDisplayWidget && mDisplayScreenIndex > -1)
     {
-        mDisplayWidget->hide();
+        mDisplayWidget->showNormal();
         mDisplayWidget->setGeometry(mDesktop->screenGeometry(mDisplayScreenIndex));
         UBPlatformUtils::showFullScreen(mDisplayWidget);
     }

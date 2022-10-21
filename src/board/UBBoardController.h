@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -177,7 +177,7 @@ class UBBoardController : public UBDocumentContainer
         void notifyPageChanged();
         void displayMetaData(QMap<QString, QString> metadatas);
 
-        void findUniquesItems(const QUndoCommand *parent, QSet<QGraphicsItem *> &itms);
+        void findUniquesItems(const QUndoCommand *parent, QSet<QGraphicsItem *> &items);
         void ClearUndoStack();
 
         void setActiveDocumentScene(UBDocumentProxy* pDocumentProxy, int pSceneIndex = 0, bool forceReload = false, bool onImport = false);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Département de l'Instruction Publique (DIP-SEM)
+ * Copyright (C) 2015-2022 Département de l'Instruction Publique (DIP-SEM)
  *
  * Copyright (C) 2013 Open Education Foundation
  *
@@ -57,7 +57,6 @@ UBDocumentThumbnailWidget::~UBDocumentThumbnailWidget()
 {
     // NOOP
 }
-
 
 void UBDocumentThumbnailWidget::mouseMoveEvent(QMouseEvent *event)
 {
@@ -295,6 +294,64 @@ void UBDocumentThumbnailWidget::setDragEnabled(bool enabled)
 bool UBDocumentThumbnailWidget::dragEnabled() const
 {
     return mDragEnabled;
+}
+
+void UBDocumentThumbnailWidget::updateThumbnailPixmap(int index, const QPixmap& newThumbnail)
+{
+    if (index >= 0 && index < mGraphicItems.length())
+    {
+        UBSceneThumbnailPixmap *thumbnail = dynamic_cast<UBSceneThumbnailPixmap*>(mGraphicItems.at(index));
+        if (thumbnail)
+        {
+            thumbnail->setPixmap(newThumbnail);
+        }
+    }
+}
+
+void UBDocumentThumbnailWidget::removeThumbnail(int sceneIndex)
+{
+    if (sceneIndex >= 0 && sceneIndex < mGraphicItems.length())
+    {
+        QGraphicsItem* thumbnailItem = mGraphicItems.at(sceneIndex);
+        QGraphicsItem* textItem      = mLabelsItems.at(sceneIndex);
+        UBSceneThumbnailPixmap *thumbnail = dynamic_cast<UBSceneThumbnailPixmap*>(thumbnailItem);
+        if (thumbnail)
+        {
+            if (thumbnail->isSelected())
+                scene()->removeItem(thumbnail->selectionItem());
+
+            mGraphicItems.removeAt(sceneIndex);
+            if (thumbnailItem)
+                scene()->removeItem(thumbnailItem);
+
+            mLabelsItems.removeAt(sceneIndex);
+            if (textItem)
+                scene()->removeItem(textItem);
+        }
+        refreshScene();
+    }
+}
+
+void UBDocumentThumbnailWidget::insertThumbnail(int index, QGraphicsPixmapItem* newThumbnail)
+{
+    if (!mGraphicItems.contains(newThumbnail)) //sometimes, refreshDocumentThumbnailsView is called before
+    {
+        auto thumbnailTextItem = new UBThumbnailTextItem(index);
+        mGraphicItems.insert(index, newThumbnail);
+        mLabelsItems.insert(index, thumbnailTextItem);
+    }
+
+    refreshScene();
+}
+
+void UBDocumentThumbnailWidget::moveThumbnail(int from, int to)
+{
+    UBSceneThumbnailPixmap *thumbnail = dynamic_cast<UBSceneThumbnailPixmap*>(mGraphicItems.at(from));
+    if (thumbnail)
+    {
+        mGraphicItems.move(from, to);
+    }
+    refreshScene();
 }
 
 void UBDocumentThumbnailWidget::hightlightItem(int index)
