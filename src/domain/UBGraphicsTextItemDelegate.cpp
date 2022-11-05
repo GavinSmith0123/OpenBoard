@@ -827,6 +827,13 @@ QVariant UBGraphicsTextItemDelegate::itemChange(QGraphicsItem::GraphicsItemChang
                 saveTextCursorFormats();
             }
         }
+        if (!value.toBool()) {
+            // text item is no longer selected.  adjust the size so
+            // it doesn't get in the way when selecting other items
+
+            delegated()->setTextWidth(
+                delegated()->document()->idealWidth());
+        }
     }
 
     return UBGraphicsItemDelegate::itemChange(change, value);
