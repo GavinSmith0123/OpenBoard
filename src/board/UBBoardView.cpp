@@ -1281,6 +1281,15 @@ void UBBoardView::mouseReleaseEvent (QMouseEvent *event)
     UBStylusTool::Enum currentTool = (UBStylusTool::Enum)UBDrawingController::drawingController ()->stylusTool ();
 
     setToolCursor (currentTool);
+
+    QPointF scenePos = mapToScene(event->pos());
+    if (currentTool == UBStylusTool::Marker) {
+        scene()->drawMarkerCircle(scenePos);
+    }
+    else if (currentTool == UBStylusTool::Pen) {
+        scene()->drawPenCircle(scenePos);
+    }
+
     // first/ propagate device release to the scene
     if (scene())
         scene()->inputDeviceRelease();
