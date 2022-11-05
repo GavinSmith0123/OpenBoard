@@ -420,6 +420,13 @@ void UBBoardView::tabletEvent (QTabletEvent * event)
         scene ()->setToolCursor (currentTool);
         setToolCursor (currentTool);
 
+        if (currentTool == UBStylusTool::Marker) {
+            scene()->drawMarkerCircle(scenePos);
+        }
+        else if (currentTool == UBStylusTool::Pen) {
+            scene()->drawPenCircle(scenePos);
+        }
+
         scene ()->inputDeviceRelease ();
 
         mPendingStylusReleaseEvent = false;
