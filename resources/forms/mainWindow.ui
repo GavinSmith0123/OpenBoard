@@ -288,9 +288,6 @@
    <property name="toolTip">
     <string>Web Browsing</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+W</string>
-   </property>
   </action>
   <action name="actionLineSmall">
    <property name="checkable">
@@ -1276,6 +1273,9 @@
    </property>
    <property name="toolTip">
     <string>Scroll Page</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionZoomIn">
