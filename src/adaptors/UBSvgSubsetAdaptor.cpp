@@ -2282,6 +2282,13 @@ QList<UBGraphicsPolygonItem*> UBSvgSubsetAdaptor::UBSvgSubsetReader::polygonItem
             }
         }
 
+        if (points.size() == 1)
+        {
+            // SVG <polyline> with only one point.  For SMART import.  Use
+            // the same point twice so a dot will be drawn.
+            points << points.at(0);
+        }
+
         for (int i = 0; i < points.size() - 1; i++)
         {
             UBGraphicsPolygonItem* polygonItem = new UBGraphicsPolygonItem(QLineF(points.at(i), points.at(i + 1)), lineWidth);
