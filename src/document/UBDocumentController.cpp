@@ -2106,6 +2106,10 @@ void UBDocumentController::setupViews()
             UBExportAdaptor* adaptor = documentManager->supportedExportAdaptors()[i];
             QAction *currentExportAction = exportMenu->addAction(adaptor->exportName());
             currentExportAction->setData(i);
+            if (i == 0) {
+                currentExportAction->setShortcut(
+                  QKeySequence(Qt::CTRL + Qt::Key_S));
+            }
             connect(currentExportAction, SIGNAL(triggered (bool)), this, SLOT(exportDocument()));
             exportMenu->addAction(currentExportAction);
             adaptor->setAssociatedAction(currentExportAction);

@@ -708,6 +708,9 @@
    <property name="toolTip">
     <string>Import a Document</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionExport">
    <property name="icon">
@@ -731,9 +734,6 @@
    </property>
    <property name="toolTip">
     <string>Open Page in Board</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionDuplicate">
