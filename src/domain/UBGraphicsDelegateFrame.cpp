@@ -180,7 +180,8 @@ void UBGraphicsDelegateFrame::initializeTransform()
     QPointF topRight = itemTransform.map(itemRect.topRight());
     QPointF  bottomLeft = itemTransform.map(itemRect.bottomLeft());
 
-    qreal horizontalFlip = (topLeft.x() > topRight.x()) ? -1 : 1;
+    //qreal horizontalFlip = (topLeft.x() > topRight.x()) ? -1 : 1;
+    qreal horizontalFlip = 1;
     mMirrorX = horizontalFlip < 0 ;
     if(horizontalFlip < 0){
         // why this is because of the way of calculating the translations that checks which side is the most is the
@@ -193,7 +194,8 @@ void UBGraphicsDelegateFrame::initializeTransform()
         bottomLeft = itemTransform.map(itemRect.bottomRight());
     }
 
-    qreal verticalFlip = (bottomLeft.y() < topLeft.y()) ? -1 : 1;
+    //qreal verticalFlip = (bottomLeft.y() < topLeft.y()) ? -1 : 1;
+    qreal verticalFlip = 1;
     // not sure that is usefull
     mMirrorY = verticalFlip < 0;
     if(verticalFlip < 0 && !mMirrorX){
@@ -799,6 +801,7 @@ void UBGraphicsDelegateFrame::positionHandles()
     int rotateHeight = QLineF(topLeft, bottomLeft).length();
 
     // Handle the mirroring
+#if 0
     if(topLeft.x() > topRight.x()){
         QPointF topTmp = topRight;
         QPointF bottomTmp = bottomRight;
@@ -816,6 +819,7 @@ void UBGraphicsDelegateFrame::positionHandles()
         bottomRight = topRight;
         topRight = rightTmp;
     }
+#endif
 
     QLineF topLine(topLeft, topRight);
     qreal angle = topLine.angle();
@@ -995,6 +999,7 @@ QRectF UBGraphicsDelegateFrame::rotateButtonBounds() const
 
 void UBGraphicsDelegateFrame::refreshGeometry()
 {
+#if 0
     // Here we want to have the left on the left, the right on the right, the top on the top and the bottom on the bottom!
     QRectF itemRect = delegated()->boundingRect();
     QTransform itemTransform = delegated()->sceneTransform();
@@ -1007,4 +1012,5 @@ void UBGraphicsDelegateFrame::refreshGeometry()
     QLineF leftLine(topLeft, bottomLeft);
     qreal height = leftLine.length();
     setRect(topRight.x() - mFrameWidth, topLeft.y() - mFrameWidth, width + 2*mFrameWidth, height + 2*mFrameWidth);
+#endif
 }
