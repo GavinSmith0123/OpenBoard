@@ -164,6 +164,13 @@ void UBGraphicsPixmapItem::copyItemParameters(UBItem *copy) const
         cp->setData(UBGraphicsItemData::ItemLocked, this->data(UBGraphicsItemData::ItemLocked));
         cp->setSourceUrl(this->sourceUrl());
 
+        /* This is for images imported from a SMART Notebook file.  TODO: it could be better to get
+         * rid of setHref at getHref and import the images in the native manner, with the filenames
+         * based on the uuid. */
+
+        if (!this->mHref.isNull())
+          cp->setHref(QStringRef(&this->mHref));
+
         cp->setZValue(this->zValue());
     }
 }
