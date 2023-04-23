@@ -2506,7 +2506,8 @@ QList<QUrl> UBGraphicsScene::relativeDependenciesOfItem(QGraphicsItem* item) con
 
     UBGraphicsPixmapItem* pixmapItem = dynamic_cast<UBGraphicsPixmapItem*>(item);
     if(pixmapItem){
-        relativePaths << QUrl(UBPersistenceManager::imageDirectory + "/" + pixmapItem->uuid().toString() + ".png");
+        //relativePaths << QUrl(UBPersistenceManager::imageDirectory + "/" + pixmapItem->uuid().toString() + ".png");
+        relativePaths << pixmapItem->getHref();
         return relativePaths;
     }
 
