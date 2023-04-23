@@ -344,6 +344,7 @@ UBGraphicsScene::UBGraphicsScene(UBDocumentProxy* parent, bool enableUndoRedoSta
 {
     UBCoreGraphicsScene::setObjectName("BoardScene");
     setItemIndexMethod(BspTreeIndex);
+    // see comment in UBGraphicsItemDelegate::remove re BspTreeIndex
 
     setUuid(QUuid::createUuid());
     setDocument(parent);

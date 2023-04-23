@@ -131,7 +131,11 @@ void UBGraphicsItemUndoCommand::undo()
             if (itemLayerType::BackgroundItem == item->data(UBGraphicsItemData::itemLayerType))
                 mScene->setAsBackgroundObject(item);
             else
+            {
                 mScene->addItem(item);
+                item->show();     /* 'hide' was called on the item
+                                     in UBGraphicsItemDelegate::remove. */
+            }
 
             if (UBGraphicsPolygonItem::Type == item->type())
             {

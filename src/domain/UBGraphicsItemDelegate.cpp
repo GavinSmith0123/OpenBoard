@@ -526,7 +526,17 @@ void UBGraphicsItemDelegate::remove(bool canUndo)
         if (mDelegated_casted)
             mDelegated_casted->setHtml(QString());
 
-        scene->removeItem(mDelegated);
+        //scene->removeItem(mDelegated);
+        mDelegated->hide();
+
+        /* Note: calling removeItem causes occasional crashes with
+           setItemIndexMethod(BspTreeIndex) (which is set in the
+           UBGraphicsScene::UBGraphicsScene constructor) due to
+           the item still being referenced in internal Qt index
+           structures, even after the item was deleted.  Calling
+           QGraphicsItem::hide instead appears to solve this problem.
+           The item is both removed and destroyed if the undo stack
+           is cleared. */
 
         if (canUndo)
         {
