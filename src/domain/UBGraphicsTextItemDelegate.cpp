@@ -383,7 +383,7 @@ void UBGraphicsTextItemDelegate::increaseSize()
    ChangeTextSize(delta, changeSize);
 }
 
-void UBGraphicsTextItemDelegate::switchSuperScript()
+void UBGraphicsTextItemDelegate::doSwitchSuperScript()
 {
     QTextCursor curCursor = delegated()->textCursor();
 
@@ -399,11 +399,65 @@ void UBGraphicsTextItemDelegate::switchSuperScript()
 
     curCursor.mergeCharFormat(format);
     delegated()->setTextCursor(curCursor);
+}
+
+void UBGraphicsTextItemDelegate::switchSuperScript()
+{
+    doSwitchSuperScript();
+
     saveTextCursorFormats();
 
     delegated()->setSelected(true);
     delegated()->setFocus();
     delegated()->contentsChanged();
+}
+
+void UBGraphicsTextItemDelegate::doSwitchBold()
+{
+    QTextCursor curCursor = delegated()->textCursor();
+
+    QTextCharFormat format;
+    switch (curCursor.charFormat().fontWeight()) {
+    case QFont::Bold:
+        format.setFontWeight(QFont::Normal);
+        break;
+    default:
+        format.setFontWeight(QFont::Bold);
+        break;
+    }
+
+    curCursor.mergeCharFormat(format);
+    delegated()->setTextCursor(curCursor);
+}
+
+void UBGraphicsTextItemDelegate::doSwitchItalic()
+{
+    QTextCursor curCursor = delegated()->textCursor();
+
+    QTextCharFormat format;
+    if (curCursor.charFormat().fontItalic()) {
+        format.setFontItalic(0);
+    } else {
+        format.setFontItalic(1);
+    }
+
+    curCursor.mergeCharFormat(format);
+    delegated()->setTextCursor(curCursor);
+}
+
+void UBGraphicsTextItemDelegate::doSwitchUnderline()
+{
+    QTextCursor curCursor = delegated()->textCursor();
+
+    QTextCharFormat format;
+    if (curCursor.charFormat().fontUnderline()) {
+        format.setFontUnderline(0);
+    } else {
+        format.setFontUnderline(1);
+    }
+
+    curCursor.mergeCharFormat(format);
+    delegated()->setTextCursor(curCursor);
 }
 
 void UBGraphicsTextItemDelegate::alignButtonProcess()
@@ -553,6 +607,23 @@ bool UBGraphicsTextItemDelegate::keyPressEvent(QKeyEvent *event)
 
 bool UBGraphicsTextItemDelegate::keyReleaseEvent(QKeyEvent *event)
 {
+    if ((event->modifiers() & Qt::ControlModifier)) {
+        switch (event->key()) {
+        case Qt::Key_6:
+            doSwitchSuperScript();
+            break;
+        case Qt::Key_B:
+            doSwitchBold();
+            break;
+        case Qt::Key_Slash:
+            doSwitchItalic();
+            break;
+        case Qt::Key_U:
+            doSwitchUnderline();
+            break;
+        }
+    }
+
     if (!delegated()->hasFocus()) {
         return true;
     }

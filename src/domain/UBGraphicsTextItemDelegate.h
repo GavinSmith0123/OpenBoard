@@ -157,7 +157,10 @@ class UBGraphicsTextItemDelegate : public UBGraphicsItemDelegate
         bool oneBlockSelection();
         void saveTextCursorFormats();
         void restoreTextCursorFormats();
-
+        void doSwitchSuperScript();
+        void doSwitchBold();
+        void doSwitchItalic();
+        void doSwitchUnderline();
 
         QAction *mEditableAction;
         struct selectionData_t {
