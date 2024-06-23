@@ -403,7 +403,22 @@ void UBGraphicsTextItemDelegate::doSwitchSuperScript()
 
 void UBGraphicsTextItemDelegate::switchSuperScript()
 {
-    doSwitchSuperScript();
+    QTextCursor curCursor = delegated()->textCursor();
+
+    QTextCharFormat format;
+    format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    curCursor.mergeCharFormat(format);
+
+    // insert superscript 2 followed by non-superscript space.
+    // select the space.
+    curCursor.insertText("2");
+    format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    curCursor.mergeCharFormat(format);
+    curCursor.insertText(" ");
+
+    curCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 2);
+    curCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+    delegated()->setTextCursor(curCursor);
 
     saveTextCursorFormats();
 
