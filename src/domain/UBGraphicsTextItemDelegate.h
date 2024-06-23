@@ -140,6 +140,7 @@ class UBGraphicsTextItemDelegate : public UBGraphicsItemDelegate
 
         DelegateButton* mFontButton;
         DelegateButton* mColorButton;
+        DelegateButton* mSupButton;
         DelegateButton* mDecreaseSizeButton;
         DelegateButton* mIncreaseSizeButton;
         DelegateButton* mAlignButton;
@@ -179,6 +180,7 @@ class UBGraphicsTextItemDelegate : public UBGraphicsItemDelegate
 
         void decreaseSize();
         void increaseSize();
+        void switchSuperScript();
 
         void alignButtonProcess();
         void onCursorPositionChanged(const QTextCursor& cursor);

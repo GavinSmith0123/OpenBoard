@@ -106,6 +106,7 @@ UBGraphicsTextItemDelegate::UBGraphicsTextItemDelegate(UBGraphicsTextItem* pDele
     , mDecreaseSizeButton(0)
     , mIncreaseSizeButton(0)
     , mAlignButton(0)
+    , mSupButton(0)
     , mLastFontPixelSize(-1)
     , delta(5)
 {
@@ -146,6 +147,12 @@ void UBGraphicsTextItemDelegate::createControls()
         connect(mIncreaseSizeButton, SIGNAL(clicked(bool)), this, SLOT(increaseSize()));
         mButtons << mIncreaseSizeButton;
     }
+    if (!mSupButton) {
+        mSupButton = new DelegateButton(":/images/superscript.svg", mDelegated, mFrame, Qt::TitleBarArea);
+        connect(mSupButton, SIGNAL(clicked(bool)), this, SLOT(switchSuperScript()));
+        mButtons << mSupButton;
+    }
+
 
     if (!mAlignButton) {
         mAlignButton = new AlignTextButton(":/images/plus.svg", mDelegated, mFrame, Qt::TitleBarArea);
@@ -213,6 +220,10 @@ void UBGraphicsTextItemDelegate::freeButtons()
     mButtons.removeOne(mAlignButton);
     delete mAlignButton;
     mAlignButton = 0;
+
+    mButtons.removeOne(mSupButton);
+    delete mSupButton;
+    mSupButton = 0;
 
     UBGraphicsItemDelegate::freeButtons();
 }
@@ -370,6 +381,29 @@ void UBGraphicsTextItemDelegate::decreaseSize()
 void UBGraphicsTextItemDelegate::increaseSize()
 {
    ChangeTextSize(delta, changeSize);
+}
+
+void UBGraphicsTextItemDelegate::switchSuperScript()
+{
+    QTextCursor curCursor = delegated()->textCursor();
+
+    QTextCharFormat format;
+    switch (curCursor.charFormat().verticalAlignment()) {
+    case QTextCharFormat::AlignSuperScript:
+        format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+        break;
+    default:
+        format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        break;
+    }
+
+    curCursor.mergeCharFormat(format);
+    delegated()->setTextCursor(curCursor);
+    saveTextCursorFormats();
+
+    delegated()->setSelected(true);
+    delegated()->setFocus();
+    delegated()->contentsChanged();
 }
 
 void UBGraphicsTextItemDelegate::alignButtonProcess()
