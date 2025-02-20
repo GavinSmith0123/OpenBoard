@@ -374,7 +374,9 @@ int UBApplication::exec(const QString& pFileToImport)
     if (UBSettings::settings()->appStartMode->get().toInt())
         applicationController->showDesktop();
     else
-        applicationController->showBoard();
+        //applicationController->showBoard();
+        // start in document list
+        applicationController->showDocument();
 
     emit UBDrawingController::drawingController()->colorPaletteChanged();
 

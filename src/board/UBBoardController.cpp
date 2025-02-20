@@ -147,7 +147,11 @@ void UBBoardController::init()
     connect(UBDownloadManager::downloadManager(), SIGNAL(downloadModalFinished()), this, SLOT(onDownloadModalFinished()));
     connect(UBDownloadManager::downloadManager(), SIGNAL(addDownloadedFileToBoard(bool,QUrl,QUrl,QString,QByteArray,QPointF,QSize,bool)), this, SLOT(downloadFinished(bool,QUrl,QUrl,QString,QByteArray,QPointF,QSize,bool)));
 
-    UBDocumentProxy* doc = UBPersistenceManager::persistenceManager()->createNewDocument();
+    /* load an existing document if one exists, else create a new document. */
+    UBDocumentProxy* doc;
+    doc = UBPersistenceManager::persistenceManager()->findDefaultDocument();
+    if (!doc)
+      doc = UBPersistenceManager::persistenceManager()->createNewDocument();
 
     setActiveDocumentScene(doc);
 

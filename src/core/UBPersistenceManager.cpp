@@ -530,6 +530,25 @@ UBDocumentProxy* UBPersistenceManager::createNewDocument(const QString& pGroupNa
     return resultDoc;
 }
 
+UBDocumentProxy* UBPersistenceManager::findDefaultDocument(const QModelIndex &parentIndex)
+{
+    for (int i = 0; i < mDocumentTreeStructureModel->rowCount(parentIndex); i++)
+    {
+        QModelIndex currentIndex = mDocumentTreeStructureModel->index(i, 0, parentIndex);
+        if (!mDocumentTreeStructureModel->isCatalog(currentIndex))
+        {
+            return mDocumentTreeStructureModel->proxyData(currentIndex);
+        }
+        else
+        {
+            UBDocumentProxy *result = findDefaultDocument(currentIndex);
+            if (result)
+              return result;
+        }
+    }
+    return NULL;
+}
+
 UBDocumentProxy* UBPersistenceManager::createDocumentFromDir(const QString& pDocumentDirectory
                                                              , const QString& pGroupName
                                                              , const QString& pName

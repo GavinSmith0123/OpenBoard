@@ -84,6 +84,8 @@ class UBPersistenceManager : public QObject
                 , int pageCount = 0
                 , bool promptDialogIfExists = false);
 
+        virtual UBDocumentProxy *findDefaultDocument(const QModelIndex &pParent = QModelIndex());
+
         virtual UBDocumentProxy* createDocumentFromDir(const QString& pDocumentDirectory
                                                        , const QString& pGroupName = ""
                 , const QString& pName = ""
