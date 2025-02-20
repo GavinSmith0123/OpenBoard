@@ -2325,6 +2325,7 @@ void UBDocumentController::show()
 
     if(!mToolsPalette)
         setupPalettes();
+    mDocumentUI->documentTreeView->setFocus();
 }
 
 
