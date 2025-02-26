@@ -2326,6 +2326,8 @@ void UBDocumentController::show()
     if(!mToolsPalette)
         setupPalettes();
     mDocumentUI->documentTreeView->setFocus();
+    mDocumentUI->thumbnailWidget->hightlightItem
+      (mBoardController->activeSceneIndex());
 }
 
 
