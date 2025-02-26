@@ -735,6 +735,9 @@
    <property name="toolTip">
     <string>Open Page in Board</string>
    </property>
+   <property name="shortcut">
+    <string>Return</string>
+   </property>
   </action>
   <action name="actionDuplicate">
    <property name="icon">
