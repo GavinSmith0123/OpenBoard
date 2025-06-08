@@ -263,7 +263,10 @@ QDialog::DialogCode UBPersistenceManager::processInteractiveReplacementDialog(UB
         QStringList docList = mDocumentTreeStructureModel->nodeNameList(parentIndex, true);
         QString docName = pProxy->metaData(UBSettings::documentName).toString();
 
-        if (docList.contains(docName)) {
+        /* disable this check as we may be loading the file into a different folder.
+           the saved file includes the folder to place it in, but we override this
+           below to the currently active folder in the document controller.  */
+        if (0 && docList.contains(docName)) {
             UBDocumentReplaceDialog *replaceDialog = new UBDocumentReplaceDialog(docName
                                                                                  , docList
                                                                                  , /*UBApplication::documentController->mainWidget()*/0
@@ -303,7 +306,24 @@ QDialog::DialogCode UBPersistenceManager::processInteractiveReplacementDialog(UB
             replaceDialog->setParent(0);
             delete replaceDialog;
         } else {
-            mDocumentTreeStructureModel->addDocument(pProxy, parentIndex);
+            /* Place imported file in currently selected folder. */
+            UBPersistenceManager *pManager = UBPersistenceManager::persistenceManager();
+
+            UBDocumentTreeModel *docModel = pManager->mDocumentTreeStructureModel;
+            UBDocumentController *ctrl = UBApplication::documentController;
+            QModelIndex selectedIndex = ctrl->firstSelectedTreeIndex();
+            if (!selectedIndex.isValid()) {
+                selectedIndex = docModel->myDocumentsIndex();
+            }
+            QModelIndex pIndex = docModel->isCatalog(selectedIndex)
+                    ? selectedIndex
+                    : selectedIndex.parent();
+
+            mDocumentTreeStructureModel->addDocument(pProxy, pIndex);
+
+            QString virtualPath = docModel->virtualPathForIndex(pIndex);
+            pProxy->setMetaData(UBSettings::documentGroupName, virtualPath);
+
             result = QDialog::Accepted;
         }
 
