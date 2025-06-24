@@ -938,8 +938,16 @@ void UBSettings::setItalicFont(bool italic)
 QString UBSettings::userDataDirectory()
 {
     static QString dataDirPath = "";
-    if(dataDirPath.isEmpty()){
-        if (getAppSettings() && getAppSettings()->contains("App/DataDirectory")) {
+    if (dataDirPath.isEmpty()){
+        QByteArray dir_override = qgetenv ("UNIBOARD_DATA_DIR");
+        if (!dir_override.isEmpty()) {
+          dataDirPath = dir_override;
+          if(checkDirectory(dataDirPath))
+              return dataDirPath;
+          else
+              qCritical() << "Impossible to create datadirpath " << dataDirPath;
+        }
+        if (0 && getAppSettings() && getAppSettings()->contains("App/DataDirectory")) {
             qDebug() << "getAppSettings()->contains(App/DataDirectory):" << getAppSettings()->contains("App/DataDirectory");
             dataDirPath = getAppSettings()->value("App/DataDirectory").toString();
             dataDirPath = replaceWildcard(dataDirPath);
