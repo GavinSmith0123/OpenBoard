@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OpenBoard</string>
+   <string>Notes</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../OpenBoard.qrc">
-    <normaloff>:/images/OpenBoard.png</normaloff>:/images/OpenBoard.png</iconset>
+    <normaloff>:/images/folder.png</normaloff>:/images/folder.png</iconset>
   </property>
   <property name="iconSize">
    <size>
@@ -622,7 +622,7 @@
      <normaloff>:/images/toolbar/menu.png</normaloff>:/images/toolbar/menu.png</iconset>
    </property>
    <property name="text">
-    <string>OpenBoard</string>
+    <string>Application</string>
    </property>
    <property name="toolTip">
     <string>OpenBoard</string>
