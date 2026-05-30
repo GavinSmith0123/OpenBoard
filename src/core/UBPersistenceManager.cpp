@@ -253,14 +253,21 @@ QDialog::DialogCode UBPersistenceManager::processInteractiveReplacementDialog(UB
 
     if (UBApplication::documentController
             && UBApplication::documentController->mainWidget()) {
+        /* This recreates the folder the file was in when it was saved,
+         * which we don't want. */
+#if 0
         QString docGroupName = pProxy->metaData(UBSettings::documentGroupName).toString();
         QModelIndex parentIndex = mDocumentTreeStructureModel->goTo(docGroupName);
         if (!parentIndex.isValid()) {
             UBApplication::overrideCursor()->setShape(saveShape);
             return QDialog::Rejected;
         }
+#endif
 
-        QStringList docList = mDocumentTreeStructureModel->nodeNameList(parentIndex, true);
+        //QStringList docList = mDocumentTreeStructureModel->nodeNameList(parentIndex, true);
+
+        QStringList docList;
+        QModelIndex parentIndex;
         QString docName = pProxy->metaData(UBSettings::documentName).toString();
 
         /* disable this check as we may be loading the file into a different folder.
